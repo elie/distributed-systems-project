@@ -17,13 +17,17 @@ server.on('message', (msg, rinfo) => {
     if (err) console.log('error in reading JSON');
     const store = JSON.parse(data);
     if (command === 'GET') {
-      console.log(store[key]);
+      server.send(store[key] || 'undefined', rinfo.port, 'localhost', err => {
+        if (err) console.log(err);
+      });
     } else if (command === 'SET') {
       const value = msg.split(' ')[3];
       store[key] = value;
       fs.writeFile('./store.json', JSON.stringify(store), err => {
         if (err) console.log(err);
-        console.log('wrote to json file', store);
+        server.send('OK', rinfo.port, 'localhost', err => {
+          if (err) console.log(err);
+        });
       });
     }
   });
