@@ -3,7 +3,6 @@ const dgram = require('dgram');
 const client = dgram.createSocket('udp4');
 
 const SERVER_PORT = 8888;
-let CLIENT_PORT = 8889;
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -13,7 +12,6 @@ const rl = readline.createInterface({
 
 client.bind({
   address: 'localhost',
-  port: CLIENT_PORT,
   exclusive: true
 });
 
@@ -29,14 +27,15 @@ rl.on('line', line => {
       console.log(err);
       client.close();
     }
-    client.on('message', (msg, rinfo) => {
-      if (rinfo.port === SERVER_PORT) {
-        console.log(msg.toString());
-        rl.prompt();
-      }
-    });
-  });
+  }); 
 }).on('close', () => {
   console.log('Have a great day!');
   process.exit(0);
+});
+
+client.on('message', (msg, rinfo) => {
+  if (rinfo.port === SERVER_PORT) {
+    console.log(msg.toString());
+    rl.prompt();
+  }
 });
