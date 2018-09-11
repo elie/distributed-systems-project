@@ -1,7 +1,7 @@
 ## Distributed Systems Project
 
-# Step 1: Start Server
+### Step 1: Start Server
 `node server.js`
 
-# Step 2: Start Client
+### Step 2: Start Client
 `node client.js`
